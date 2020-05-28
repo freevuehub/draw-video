@@ -24,16 +24,9 @@ const Draw = (props) => {
   useEffect(() => {
     const { current } = refCanvas
 
-    setCanvas2d(current)
+    props.draw(current)
   })
 
-  const setCanvas2d = (canvas) => {
-    const ctx = canvas.getContext('2d')
-
-    ctx.fillRect(100, 100, 50, 50)
-
-    props.draw(canvas)
-  }
   const handleDrawStart = (event) => {
     const { current } = refCanvas
 
