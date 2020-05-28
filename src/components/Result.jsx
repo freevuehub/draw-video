@@ -1,68 +1,46 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { ResultStyled } from '../styled'
+import { ItemStyled } from '../styled'
 
 const Result = (props) => {
-  const canvas = useRef(null)
-  const { draw } = props
-  // const [text, setText] = useState('Hello World')
-  const [bufferCtx, setBufferCtx] = useState({})
-  const [viewCtx, setViewCtx] = useState(null)
+  const refCanvas = useRef(null)
 
   useEffect(() => {
-    const bufferCanvas = canvas.current
-    const viewCanvas = canvas.current
+    const { current } = refCanvas
 
-    setViewCtx(viewCanvas.getContext('2d'))
-    setBufferCtx(bufferCanvas.getContext('2d'))
-  }, [canvas])
+    current.width = props.canvasRate.width
+    current.height = props.canvasRate.height
+  }, [refCanvas, props.canvasRate])
+
   useEffect(() => {
-    const { current } = props.video
-
-    if (current) {
-      current.oncanplay = setView
-
-      if (viewCtx) {
-        if (draw.src) {
-          console.log(draw.src)
-          bufferCtx.drawImage(draw, 0, 0)
-        }
-      }
+    props.video.oncanplay = () => {
+      frameVideo()
     }
   })
 
-  const setView = () => {
-    const viewCanvas = canvas.current
-    const bufferCanvas = canvas.current
+  const frameVideo = () => {
+    const { current } = refCanvas
+    const ctx = current.getContext('2d')
 
-    viewCanvas.width = 812
-    viewCanvas.height = 320
+    ctx.drawImage(props.video, 0, 0, current.width, current.height)
+    ctx.drawImage(props.draw, 0, 0, current.width, current.height)
 
-    const fps = () => {
-      const image = bufferCtx.getImageData(
-        0,
-        0,
-        viewCanvas.width,
-        viewCanvas.height
-      )
-      bufferCtx.drawImage(props.video.current, 0, 0, 812, 320)
-      bufferCtx.globalAlpha = 0.5
-      // console.log(draw)
-      if (draw.src) {
-        bufferCtx.drawImage(draw, 0, 0)
-      }
-
-      viewCtx.drawImage(bufferCanvas, 0, 0)
-
-      setTimeout(fps, 1000 / 60)
-    }
-
-    fps()
+    setTimeout(frameVideo, 1000 / 60)
   }
 
   return (
-    <ResultStyled>
-      <canvas ref={canvas}>이 브라우저는 지원하지 않습니다.</canvas>
-    </ResultStyled>
+    <ItemStyled color="blue">
+      <h1>결과</h1>
+      <canvas
+        ref={refCanvas}
+        style={{
+          width: props.canvasRate.width,
+          height: props.canvasRate.height,
+          display: 'block',
+        }}
+      >
+        이 브라우저는 지원하지 않습니다.
+      </canvas>
+    </ItemStyled>
   )
 }
 

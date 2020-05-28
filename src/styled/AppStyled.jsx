@@ -14,6 +14,7 @@ export const Wrapper = styled.div`
   padding: 10px;
   height: 100%;
   align-items: center;
+  justify-content: space-evenly;
 `
 
 export const ItemWrapper = styled.div`
