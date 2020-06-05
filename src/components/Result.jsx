@@ -24,6 +24,8 @@ const Result = (props) => {
     ctx.drawImage(props.video, 0, 0, current.width, current.height)
     ctx.drawImage(props.draw, 0, 0, current.width, current.height)
 
+    props.result(current)
+
     setTimeout(frameVideo, 1000 / 60)
   }
 

@@ -31,10 +31,18 @@ const Draw = (props) => {
     const { current } = refCanvas
 
     setMouseValue({
-      prevX: event.clientX - current.offsetLeft,
-      prevY: event.clientY - current.offsetTop,
-      currX: event.clientX - current.offsetLeft,
-      currY: event.clientY - current.offsetTop,
+      prevX: event.touches
+        ? event.touches[0].clientX
+        : event.clientX - current.offsetLeft,
+      prevY: event.touches
+        ? event.touches[0].clientY
+        : event.clientY - current.offsetTop,
+      currX: event.touches
+        ? event.touches[0].clientX
+        : event.clientX - current.offsetLeft,
+      currY: event.touches
+        ? event.touches[0].clientY
+        : event.clientY - current.offsetTop,
     })
     setLineDraw(true)
   }
@@ -45,8 +53,12 @@ const Draw = (props) => {
       setMouseValue({
         prevX: mouseValue.currX,
         prevY: mouseValue.currY,
-        currX: event.clientX - current.offsetLeft,
-        currY: event.clientY - current.offsetTop,
+        currX: event.touches
+          ? event.touches[0].clientX
+          : event.clientX - current.offsetLeft,
+        currY: event.touches
+          ? event.touches[0].clientY
+          : event.clientY - current.offsetTop,
       })
 
       onDraw()
@@ -89,16 +101,14 @@ const Draw = (props) => {
       <h1>그리기 창</h1>
       <canvas
         ref={refCanvas}
-        style={{
-          width: props.canvasRate.width,
-          height: props.canvasRate.height,
-          display: 'block',
-          background: '#e2e2e250',
-        }}
         onMouseDown={handleDrawStart}
         onMouseMove={handleDrawing}
         onMouseUp={handleDrawEnd}
         onMouseOut={handleDrawEnd}
+        onTouchStart={handleDrawStart}
+        onTouchMove={handleDrawing}
+        onTouchEnd={handleDrawEnd}
+        onTouchCancel={handleDrawEnd}
       >
         지금 이용중이신 브라우저는 지원을 하지 않습니다.
       </canvas>

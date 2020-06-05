@@ -19,6 +19,8 @@ const Video = (props) => {
         },
       })
 
+      console.log('res', res)
+
       if ('srcObject' in current) {
         current.srcObject = res
       } else {
